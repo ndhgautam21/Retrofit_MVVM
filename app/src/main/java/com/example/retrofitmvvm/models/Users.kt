@@ -6,6 +6,6 @@ data class Users(
     val email_id : String,
     val phone_no : String,
     val image : String,
-    val create_at : String?,
+    val created_at : String?,
     val updated_at : String?
 )

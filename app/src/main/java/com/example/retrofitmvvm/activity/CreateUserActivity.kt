@@ -1,10 +1,9 @@
 package com.example.retrofitmvvm.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.retrofitmvvm.R
 import com.example.retrofitmvvm.api.RequestHelper
@@ -22,23 +21,36 @@ class CreateUserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+        val id : Int = intent.getIntExtra("id", -1)
         val usersRequest = RequestHelper.getInstance().create(UsersRequest::class.java)
-        viewModel = ViewModelProvider(this, CreateUserViewModelFactory(UsersRepository(usersRequest)))[CreateUserViewModel::class.java]
+        viewModel = ViewModelProvider(this, CreateUserViewModelFactory(UsersRepository(usersRequest), id))[CreateUserViewModel::class.java]
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_user)
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        viewModel.createLD.observe(this) {
-            Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_SHORT).show()
+        viewModel.createUserLD.observe(this) { user ->
+            Toast.makeText(applicationContext, user.toString(), Toast.LENGTH_SHORT).show()
+            finish()
         }
 
-        viewModel.errorLD.observe(this) {
-            Toast.makeText(applicationContext, "ERROR", Toast.LENGTH_SHORT).show()
+        viewModel.updateUserLD.observe(this) { user ->
+            Toast.makeText(applicationContext, user.toString(), Toast.LENGTH_SHORT).show()
+            finish()
         }
 
-        viewModel.getUserByIdLD.observe(this) {
-            viewModel.getUserById(it)
+        viewModel.errorLD.observe(this) { error ->
+            if (error) {
+                Toast.makeText(applicationContext, ERROR_MESSAGE, Toast.LENGTH_SHORT).show()
+            }
         }
+
+        viewModel.getUserByIdLD.observe(this) { user ->
+            viewModel.getUserById(user)
+        }
+    }
+
+    companion object {
+        const val ERROR_MESSAGE = "Something went wrong"
     }
 }

@@ -24,6 +24,6 @@ interface UsersRequest {
     @PUT(value = "/users/update/{id}")
     suspend fun updateUser(@Body users: Users, @Path("id") int: Int) : Response<Users>
 
-    @DELETE(value = "users/{id}")
+    @DELETE(value = "/users/delete/{id}")
     suspend fun deleteUser(@Path("id") int: Int) : Response<Objects>
 }

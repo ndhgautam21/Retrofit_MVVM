@@ -22,6 +22,7 @@ class UserAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.sampleUserBinding.user = list[position]
         holder.sampleUserBinding.listener = listener
+        holder.sampleUserBinding.imageUrl = "https://ih1.redbubble.net/image.2202935025.9804/st,small,507x507-pad,600x600,f8f8f8.jpg"
         holder.sampleUserBinding.executePendingBindings()
     }
 

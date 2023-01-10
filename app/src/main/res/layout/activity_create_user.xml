@@ -94,9 +94,10 @@
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_margin="8dp"
             app:cornerRadius="8dp"
+            android:enabled="@{viewModel.loadingLD}"
             android:onClick="@{() -> viewModel.addUser()}"
             android:text="@{viewModel.isCreate}"/>
 
@@ -104,8 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cornerRadius="8dp"
-            android:text="@{viewModel.loadingLD}"/>
+            app:cornerRadius="8dp" />
 
     </LinearLayout>
 

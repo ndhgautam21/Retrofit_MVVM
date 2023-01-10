@@ -40,15 +40,21 @@ class MainActivity : AppCompatActivity(), UserListener {
 
         // Binding...
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        //setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.toolbar)
 
         binding.lifecycleOwner = this
         binding.mainViewModel = viewModel
 
-        viewModel.getUserData()
-        // user list observer
-        viewModel.usersLiveData.observe(this) {
-            binding.recyclerView.adapter = UserAdapter(viewModel.usersLiveData.value!!, this)
+        /**
+         * Observers
+         */
+        viewModel.usersLiveData.observe(this) { list ->
+            binding.recyclerView.adapter = UserAdapter(list, this)
+        }
+
+        viewModel.deleteUserLD.observe(this) { obj ->
+            Toast.makeText(applicationContext, obj.toString(), Toast.LENGTH_SHORT).show()
+            viewModel.getUserData()
         }
 
         viewModel.errorLD.observe(this) {
@@ -58,18 +64,6 @@ class MainActivity : AppCompatActivity(), UserListener {
         binding.fabButton.setOnClickListener {
             startActivity(Intent(applicationContext, CreateUserActivity::class.java))
         }
-        //binding.recyclerView.adapter = UserAdapter(viewModel.usersLiveData.value!!)
-        //binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
-//        val navController = findNavController(R.id.nav_host_fragment_content_main)
-//        appBarConfiguration = AppBarConfiguration(navController.graph)
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-
-//        binding.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAnchorView(R.id.fab)
-//                .setAction("Action", null).show()
-//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -94,9 +88,28 @@ class MainActivity : AppCompatActivity(), UserListener {
                 || super.onSupportNavigateUp()
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.getUserData()
+    }
+
     override fun addUser(users: Users, view : View) {
         Snackbar.make(view, users.name , Snackbar.LENGTH_LONG)
             .setAction("Action", null).show()
         //Toast.makeText(applicationContext, users.login, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onItemClickListener(users: Users) {
+        TODO("Not")
+    }
+
+    override fun onEditButtonClickListener(users: Users) {
+        val intent = Intent(applicationContext, CreateUserActivity::class.java)
+        intent.putExtra("id", users.id)
+        startActivity(intent)
+    }
+
+    override fun onDeleteButtonCLickListener(users: Users) {
+        viewModel.deleteUserData(users.id!!)
     }
 }

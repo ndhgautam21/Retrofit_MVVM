@@ -7,7 +7,7 @@ import java.net.URL
 
 object RequestHelper {
 
-    private const val BASE_URL = "http://10.0.2.2:8080/"
+    private const val BASE_URL = "http://10.1.3.25:8080/"
 
     fun getInstance(): Retrofit {
         return Retrofit.Builder()

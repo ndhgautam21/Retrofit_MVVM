@@ -38,24 +38,24 @@
                 android:orientation="vertical"
                 tools:context=".MainActivity">
 
-                <!--        <com.google.android.material.appbar.AppBarLayout-->
-                <!--            android:layout_width="match_parent"-->
-                <!--            android:layout_height="wrap_content"-->
-                <!--            android:fitsSystemWindows="true">-->
+                <com.google.android.material.appbar.AppBarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true">
 
-                <!--            <com.google.android.material.appbar.MaterialToolbar-->
-                <!--                android:id="@+id/toolbar"-->
-                <!--                android:layout_width="match_parent"-->
-                <!--                android:layout_height="?attr/actionBarSize" />-->
+                    <com.google.android.material.appbar.MaterialToolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize" />
 
-                <!--        </com.google.android.material.appbar.AppBarLayout>-->
+                </com.google.android.material.appbar.AppBarLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:layout_weight="0"
-                    android:text="@{mainViewModel.loadingLiveData, default = Button}">
+                    android:enabled="@{mainViewModel.loadingLiveData}">
 
                 </com.google.android.material.button.MaterialButton>
 
@@ -80,6 +80,17 @@
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+<!--        <ProgressBar-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:visibility="visible"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+
+<!--        </ProgressBar>-->
 
         <!-- Floating action Button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -1,10 +1,12 @@
 package com.example.retrofitmvvm.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.retrofitmvvm.api.UsersRequest
 import com.example.retrofitmvvm.models.Users
-import java.util.Objects
+import java.util.*
+import java.util.logging.Logger
 
 class UsersRepository(private val usersRequest: UsersRequest) {
 
@@ -14,7 +16,7 @@ class UsersRepository(private val usersRequest: UsersRequest) {
     private val updateUserMLD = MutableLiveData<Users>()
     private val deleteUserMLD = MutableLiveData<Objects>()
 
-    private val loadingMLD = MutableLiveData<String>().apply { value = "No" }
+    private val loadingMLD = MutableLiveData(true)
     private val errorMLD = MutableLiveData<Boolean>()
 
     val usersLiveData: LiveData<List<Users>>
@@ -32,7 +34,7 @@ class UsersRepository(private val usersRequest: UsersRequest) {
     val deleteUserLD: LiveData<Objects>
         get() = deleteUserMLD
 
-    val loadingLD: LiveData<String>
+    val loadingLD: LiveData<Boolean>
         get() = loadingMLD
 
     val errorLD: LiveData<Boolean>
@@ -42,67 +44,92 @@ class UsersRepository(private val usersRequest: UsersRequest) {
      *
      */
     suspend fun getUsers() {
-        loadingMLD.postValue("Yes")
-        val result = usersRequest.getUsers()
-        if (result.isSuccessful) {
-            usersMLD.postValue(result.body())
-        } else {
+        loadingMLD.postValue(false)
+        try {
+            val result = usersRequest.getUsers()
+            if (result.isSuccessful) usersMLD.postValue(result.body())
+            else {
+                errorMLD.postValue(true)
+            }
+        } catch (e : Exception) {
+            Log.e(">>>> User Repository", e.message!!)
             errorMLD.postValue(true)
+        } finally {
+            loadingMLD.postValue(true)
         }
-        loadingMLD.postValue("No")
     }
 
     suspend fun getUserById(id : Int) {
-        loadingMLD.postValue("Yes")
-        val result = usersRequest.getUserById(id)
-        if (result.isSuccessful) {
-            getUserByIdMLD.postValue(result.body())
-        } else {
+        loadingMLD.postValue(false)
+        try {
+            val result = usersRequest.getUserById(id)
+            if (result.isSuccessful) {
+                getUserByIdMLD.postValue(result.body())
+            } else {
+                errorMLD.postValue(true)
+            }
+        } catch (e : Exception) {
             errorMLD.postValue(true)
+        } finally {
+            loadingMLD.postValue(true)
         }
-        loadingMLD.postValue("No")
     }
 
     /**
      *
      */
     suspend fun createUser(users: Users) {
-        loadingMLD.postValue("Yes")
-        val result = usersRequest.createUser(users)
-        if (result.isSuccessful) {
-            createUserMLD.postValue(result.body())
-        } else {
+        loadingMLD.postValue(false)
+        try {
+            val result = usersRequest.createUser(users)
+            if (result.isSuccessful) {
+                createUserMLD.postValue(result.body())
+            } else {
+                errorMLD.postValue(true)
+            }
+        } catch (e : Exception) {
             errorMLD.postValue(true)
+        } finally {
+            loadingMLD.postValue(true)
         }
-        loadingMLD.postValue("No")
     }
 
     /**
      *
      */
     suspend fun updateUser(users: Users, id : Int) {
-        loadingMLD.postValue("Yes")
-        val result = usersRequest.updateUser(users, id)
-        if (result.isSuccessful) {
-            updateUserMLD.postValue(result.body())
-        } else {
+        loadingMLD.postValue(false)
+        try {
+            val result = usersRequest.updateUser(users, id)
+            if (result.isSuccessful) {
+                updateUserMLD.postValue(result.body())
+            } else {
+                errorMLD.postValue(true)
+            }
+        } catch (e : Exception) {
             errorMLD.postValue(true)
+        } finally {
+            loadingMLD.postValue(true)
         }
-        loadingMLD.postValue("No")
     }
 
     /**
      *
      */
-    suspend fun deleteUser() {
-        loadingMLD.postValue("Yes")
-        val result = usersRequest.deleteUser(23)
-        if (result.isSuccessful) {
-            deleteUserMLD.postValue(result.body())
-        } else {
+    suspend fun deleteUser(id: Int) {
+        loadingMLD.postValue(false)
+        try {
+            val result = usersRequest.deleteUser(id)
+            if (result.isSuccessful) {
+                deleteUserMLD.postValue(result.body())
+            } else {
+                errorMLD.postValue(true)
+            }
+        } catch (e : Exception) {
             errorMLD.postValue(true)
+        } finally {
+            loadingMLD.postValue(true)
         }
-        loadingMLD.postValue("No")
     }
 
 
